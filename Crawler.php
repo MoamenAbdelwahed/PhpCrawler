@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpCrawler;
+include 'Helper.php';
 
 error_reporting(E_ERROR | E_PARSE);
 
@@ -14,6 +14,7 @@ echo "Done";
 /**
  * @param string $url
  * @param Helper $helper
+ * @throws Exception if there is a problem with writing to or closing the json file
  */
 function getLinksFromUrl($url, $helper)
 {
@@ -35,7 +36,7 @@ function getLinksFromUrl($url, $helper)
         $link = $tag->getAttribute('href');
         // To prevent iterating the same link twice
         if (!isset($crawled[$link]) && $link !== $url) {
-            $crawled[$link] = '/';
+            $crawled[$link] = true;
 
             if (substr($link, 0, 1) == "/" && substr($link, 0, 2) != "//") {
                 $link = $parsedTargetUrl["scheme"]."://".$parsedTargetUrl["host"].$link;
@@ -63,4 +64,5 @@ function getLinksFromUrl($url, $helper)
             continue;
         }
     }
+    $helper->closeJsonFile();
 }

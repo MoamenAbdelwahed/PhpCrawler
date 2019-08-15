@@ -1,41 +1,57 @@
 <?php
 
-namespace PhpCrawler;
-
 class Helper
 {
-    public $linkCounter = 0;
     private $connector;
+    private $jsonFile;
 
+    /**
+     * Helper constructor.
+     * @throws Exception
+     */
     function __construct()
     {
-        $this->connector = new Connector();
+        //$this->connector = new Connector();
+        $this->jsonFile = fopen('links.txt', 'w+');
+        if (!$this->jsonFile) {
+            throw new Exception('Failed to create json file');
+        }
     }
 
-    public function incrementValue()
-    {
-        $this->linkCounter++;
-    }
-
-    public function getCounterValue()
-    {
-        return $this->linkCounter;
-    }
-
+    /**
+     * @param string $url
+     * @throws Exception if cannot write to json file
+     */
     public function addVisitedUrl($url)
     {
-        $this->incrementValue();
-        $this->connector->addNewUrl($url);
+        $this->appendLinkToJsonFile($url);
     }
 
     public function checkIfUrlIsVisited($url)
     {
-        return  $this->connector->checkIfUrlExists($url);
+        return false;
+        //return $this->connector->checkIfUrlExists($url);
     }
 
-    public function printUrlValue($url)
+    /**
+     * @param string $url
+     * @throws Exception
+     */
+    public function appendLinkToJsonFile($url)
     {
-        echo $this->getCounterValue().' => '.$url;
-        echo "\n";
+        if (!fwrite($this->jsonFile, $url."\n")) {
+            throw new Exception('Cannot write to json file');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function closeJsonFile()
+    {
+        if (!fclose($this->jsonFile)) {
+            throw new Exception('Cannot close json file');
+        }
+        unlink('links.json');
     }
 }

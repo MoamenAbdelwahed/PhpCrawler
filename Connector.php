@@ -1,7 +1,5 @@
 <?php
 
-namespace PhpCrawler;
-
 class Connector
 {
     private $dbConfig;

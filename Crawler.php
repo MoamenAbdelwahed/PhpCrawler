@@ -1,7 +1,8 @@
 <?php
-error_reporting(E_ERROR | E_PARSE);
 
-include "Helper.php";
+namespace PhpCrawler;
+
+error_reporting(E_ERROR | E_PARSE);
 
 $config = require_once  __DIR__ . '/config.php';
 $helper = new Helper();
@@ -10,20 +11,22 @@ echo "Crawling Started";
 getLinksFromUrl($config['targetUrl'], $helper);
 echo "Done";
 
+/**
+ * @param string $url
+ * @param Helper $helper
+ */
 function getLinksFromUrl($url, $helper)
 {
-
     $helper->addVisitedUrl($url);
 
     if (substr($url, -1) == '/' || substr($url, -1) == '#') {
         $url = substr($url, 0, -1);
     }
     $parsedTargetUrl = parse_url($url);
-    $rootUrl = $parsedTargetUrl["scheme"]."://".$parsedTargetUrl["host"];
     $rootDomain = str_replace("www.", "", $parsedTargetUrl["host"]);
         
     $content = file_get_contents($url);
-    $document = new DOMDocument;
+    $document = new \DOMDocument();
     $document->loadHTML($content);
     $urls = $document->getElementsByTagName('a');
 

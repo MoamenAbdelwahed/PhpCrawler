@@ -1,6 +1,6 @@
 <?php
 
-include "Connector.php";
+namespace PhpCrawler;
 
 class Helper
 {

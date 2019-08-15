@@ -1,5 +1,7 @@
 <?php
 
+namespace PhpCrawler;
+
 class Connector
 {
     private $dbConfig;
@@ -14,7 +16,7 @@ class Connector
     private function getInstance()
     {
         if ($this->instance == null) {
-            $this->initEnvironment() ;
+            $this->initEnvironment();
             $this->instance = new mysqli(
                 $this->dbConfig['serverName'],
                 $this->dbConfig['username'],
